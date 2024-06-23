@@ -6,7 +6,7 @@
 /*   By: vdomasch <vdomasch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:49:28 by vincent           #+#    #+#             */
-/*   Updated: 2024/06/23 12:53:31 by vdomasch         ###   ########.fr       */
+/*   Updated: 2024/06/23 12:58:21 by vdomasch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	*routine(void *arg)
 	t_philo	*philo;
 	size_t	start_time;
 	
-	printf("Routine started\n");
 	philo = (t_philo *)arg;
 	safely_add(&philo->data->m_data, &philo->data->nb_ready, 1);
 	while (!safely_get_bool(&philo->data->m_data, &philo->data->is_ready))
@@ -150,5 +149,7 @@ int	main(int argc, char **argv)
 		return (1);
 	init_philo(&data);
 	launch_thread(&data);
+	free(data.thread);
+	free(data.philo);
 	return (0);
 }
