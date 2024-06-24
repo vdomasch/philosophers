@@ -23,13 +23,6 @@ CC					=	cc
 
 FLAGS				=	-Wall -Werror -Wextra
 
-DFLAGS				=	-fsanitize=address -g3
-
-
-ifeq ($(DEBUG),true)
-	FLAGS = -Wall -Werror -Wextra $(DFLAGS)
-endif
-
 all:				$(OBJS_DIR) $(NAME)
 
 $(OBJS_DIR)/%.o:	$(SRCS_DIR)/%.c $(HEADERS)
@@ -51,7 +44,4 @@ fclean:
 re:
 						$(MAKE) fclean all
 
-debug				:
-							@$(MAKE) fclean all DEBUG=true
-
-.PHONY: all clean fclean re libft debug
+.PHONY: all clean fclean re libft

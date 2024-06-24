@@ -1,51 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   safe_set.c                                         :+:      :+:    :+:   */
+/*   safe_get.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdomasch <vdomasch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/22 17:31:37 by vdomasch          #+#    #+#             */
-/*   Updated: 2024/06/24 12:41:19 by vdomasch         ###   ########.fr       */
+/*   Created: 2024/06/24 12:41:20 by vdomasch          #+#    #+#             */
+/*   Updated: 2024/06/24 12:41:27 by vdomasch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-bool	safely_get_bool(pthread_mutex_t *mutex, bool *value)
+void	safely_set_bool(pthread_mutex_t *mutex, bool *value, bool new)
 {
-	int	result;
-
 	pthread_mutex_lock(mutex);
-	result = *value;
+	*value = new;
 	pthread_mutex_unlock(mutex);
-	return (result);
 }
 
-int	safely_get_int(pthread_mutex_t *mutex, int *value)
+void	safely_set_int(pthread_mutex_t *mutex, int *value, int new)
 {
-	int	result;
-
 	pthread_mutex_lock(mutex);
-	result = *value;
+	*value = new;
 	pthread_mutex_unlock(mutex);
-	return (result);
 }
 
-time_t	safely_get_time(pthread_mutex_t *mutex, time_t *value)
+void	safely_set_time(pthread_mutex_t *mutex, time_t *value, time_t new)
 {
-	size_t	result;
-
 	pthread_mutex_lock(mutex);
-	result = *value;
+	*value = new;
 	pthread_mutex_unlock(mutex);
-	return (result);
 }
 
-void	safe_print(t_philo *philo, const char *str, int id)
+void	safely_add(pthread_mutex_t *mutex, int *value, int add)
 {
-	pthread_mutex_lock(&philo->data->m_print);
-	if (!safely_get_bool(&philo->data->m_data, &philo->data->is_dead))
-		printf("%ld %d %s\n", get_time() - philo->data->start_time, id, str);
-	pthread_mutex_unlock(&philo->data->m_print);
+	pthread_mutex_lock(mutex);
+	*value += add;
+	pthread_mutex_unlock(mutex);
 }

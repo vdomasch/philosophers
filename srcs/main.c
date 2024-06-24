@@ -6,13 +6,13 @@
 /*   By: vdomasch <vdomasch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:49:28 by vincent           #+#    #+#             */
-/*   Updated: 2024/06/24 13:48:31 by vdomasch         ###   ########.fr       */
+/*   Updated: 2024/06/24 15:50:17 by vdomasch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	obser_philo(t_data *data, int time_to_die)
+static void	observe_philo(t_data *data, int time_to_die)
 {
 	t_philo	*philo;
 	int		i;
@@ -21,7 +21,8 @@ void	obser_philo(t_data *data, int time_to_die)
 	while (i < data->nb_philo)
 	{
 		philo = &data->philo[i];
-		if (safely_get_time(&philo->data->m_philo, &philo->last_meal) + time_to_die < get_time())
+		if (safely_get_time(&philo->data->m_philo, &philo->last_meal)
+			+ time_to_die < get_time())
 		{
 			safe_print(philo, "died", philo->id);
 			safely_set_bool(&data->m_data, &data->is_dead, true);
@@ -31,39 +32,27 @@ void	obser_philo(t_data *data, int time_to_die)
 	}
 }
 
-void	observer(t_data *data)
+static void	observer(t_data *data)
 {
-	//t_philo	*philo;
 	int		nb_philo;
 	int		time_to_die;
 	int		refresh_time;
-	//int		i;
 
 	nb_philo = safely_get_int(&data->m_data, &data->nb_philo);
-	time_to_die = safely_get_int(&data->m_data, &data->time_to_die) + (nb_philo / 10);
+	time_to_die = safely_get_int(&data->m_data, &data->time_to_die)
+		+ (nb_philo / 10);
 	refresh_time = time_to_die * 0.1;
 	while (!safely_get_bool(&data->m_data, &data->is_dead))
 	{
-		obser_philo(data, time_to_die);
-	/*	i = 0;
-		while (i < data->nb_philo)
-		{
-			philo = &data->philo[i];
-			if (safely_get_time(&philo->data->m_philo, &philo->last_meal) + time_to_die < get_time())
-			{
-				safe_print(philo, "died", philo->id);
-				safely_set_bool(&data->m_data, &data->is_dead, true);
-				break ;
-			}
-			i++;
-		}*/
-		if (safely_get_int(&data->m_data, &data->nb_full) == safely_get_int(&data->m_data, &data->nb_philo))
+		observe_philo(data, time_to_die);
+		if (safely_get_int(&data->m_data, &data->nb_full)
+			== safely_get_int(&data->m_data, &data->nb_philo))
 			safely_set_bool(&data->m_data, &data->is_dead, true);
 		ft_usleep(refresh_time);
 	}
 }
 
-int	launch_thread(t_data *data)
+static int	launch_thread(t_data *data)
 {
 	int	i;
 
@@ -81,6 +70,12 @@ int	launch_thread(t_data *data)
 	safely_set_bool(&data->m_data, &data->is_ready, true);
 	ft_usleep(10);
 	observer(data);
+	i = 0;
+	while (i < data->nb_philo)
+	{
+		pthread_join(data->thread[i], NULL);
+		i++;
+	}
 	return (0);
 }
 
@@ -99,33 +94,11 @@ int	main(int argc, char **argv)
 		return (1);
 	if (check_value(&data))
 	{
-		free(data.thread);
-		free(data.philo);
-		pthread_mutex_destroy(&data.m_philo);
-		pthread_mutex_destroy(&data.m_print);
-		pthread_mutex_destroy(&data.m_ready);
-		pthread_mutex_destroy(&data.m_data);
+		free_destroy(&data, false);
 		return (1);
 	}
 	init_philo(&data);
 	launch_thread(&data);
-	int i = 0;
-	while (i < data.nb_philo)
-	{
-		pthread_join(data.thread[i], NULL);
-		i++;
-	}
-	i = 0;
-	while (i < data.nb_philo)
-	{
-		pthread_mutex_destroy(&data.philo[i].left_fork);
-		i++;
-	}
-	pthread_mutex_destroy(&data.m_philo);
-	pthread_mutex_destroy(&data.m_print);
-	pthread_mutex_destroy(&data.m_ready);
-	pthread_mutex_destroy(&data.m_data);
-	free(data.philo);
-	free(data.thread);
+	free_destroy(&data, true);
 	return (0);
 }
