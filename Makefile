@@ -9,13 +9,15 @@ HEADER_DIR			=	./
 FILES				=	main.c			\
 						checks.c		\
 						init.c			\
-						safe_mutex.c	\
+						routine.c		\
+						safe_get.c		\
+						safe_set.c		\
 						utils.c			\
 						libft.c			\
 						
 OBJS				=	$(FILES:%.c=$(OBJS_DIR)/%.o)
 
-HEADERS				=	$(HEADER_DIR)/$(NAME).h						\
+HEADERS				=	$(HEADER_DIR)/$(NAME).h
 
 CC					=	cc
 

@@ -6,7 +6,7 @@
 /*   By: vdomasch <vdomasch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 12:22:47 by vdomasch          #+#    #+#             */
-/*   Updated: 2024/06/23 12:44:57 by vdomasch         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:35:53 by vdomasch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool	check_args(int argc, char **argv)
 {
 	int	i;
-	
+
 	i = 1;
 	while (i < argc)
 	{
@@ -29,13 +29,13 @@ bool	check_args(int argc, char **argv)
 	return (0);
 }
 
-bool check_value(t_data *data)
+bool	check_value(t_data *data)
 {
 	if (data->nb_philo < 1
-	|| data->time_to_die < 1
-	|| data->time_to_eat < 1
-	|| data->time_to_sleep < 1 
-	|| data->nb_meal == 0)
+		|| data->time_to_die < 1
+		|| data->time_to_eat < 1
+		|| data->time_to_sleep < 1
+		|| data->nb_meal == 0)
 	{
 		printf("Error: arguments must be strictly positive\n");
 		return (1);

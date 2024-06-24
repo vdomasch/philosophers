@@ -6,7 +6,7 @@
 /*   By: vdomasch <vdomasch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 14:52:09 by vdomasch          #+#    #+#             */
-/*   Updated: 2024/06/23 12:48:24 by vdomasch         ###   ########.fr       */
+/*   Updated: 2024/06/24 13:28:41 by vdomasch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_philo
 {
 	int				id;
 	int				nb_meal;
-	bool 			fork;
+	bool			fork;
 	bool			is_full;
 	time_t			last_meal;
 	pthread_mutex_t	left_fork;
@@ -50,19 +50,20 @@ typedef struct s_data
 	int				nb_full;
 	int				nb_ready;
 	bool			is_dead;
-	bool 			is_ready;
+	bool			is_ready;
 	time_t			start_time;
 	pthread_t		*thread;
 	pthread_mutex_t	m_philo;
 	pthread_mutex_t	m_print;
 	pthread_mutex_t	m_ready;
-	pthread_mutex_t m_data;
-	t_philo *philo;
+	pthread_mutex_t	m_data;
+	t_philo			*philo;
 }	t_data;
 
 size_t	ft_strlen(const char *s);
 int		str_is_digit(const char *str);
 int		ft_atoi(const char *str);
+void	ft_usleep(time_t time);
 time_t	get_time(void);
 
 bool	check_args(int argc, char **argv);
